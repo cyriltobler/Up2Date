@@ -1,5 +1,6 @@
 const Parser = require('rss-parser');
 const getImgFromArticle = require('./getImg');
+const getDB = require('./db');
 
 const parser = new Parser({
     customFields: {
@@ -19,10 +20,16 @@ async function crawlFeed(feedURL) {
     try {
         const feed = await parser.parseURL(feedURL);
 
+        const db = await getDB();
+        const collection = db.collection('article');
+
         const articlesToInsert = [];
 
         await Promise.all(feed.items.map(async (orginalArticle) => {
             const guid = getIdFromArticle(feed, orginalArticle.guid);
+
+            const existingReport = await collection.findOne({ _id: guid });
+            if (existingReport) return;
 
             const article = {
                 _id: guid,
@@ -35,6 +42,9 @@ async function crawlFeed(feedURL) {
 
             articlesToInsert.push(article);
         }));
+
+        if (articlesToInsert.length === 0) return;
+        await collection.insertMany(articlesToInsert);
     } catch (error) {
         console.error(error); // replace with logger
     }
