@@ -11,5 +11,6 @@ module.exports = {
     rules: {
         indent: ['error', 4],
         'no-plusplus': 'off',
+        'linebreak-style': ['error', 'windows'],
     },
 };
