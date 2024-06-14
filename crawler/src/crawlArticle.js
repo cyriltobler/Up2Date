@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 const Parser = require('rss-parser');
 const getImgFromArticle = require('./getImg');
 const getDB = require('./db');
@@ -16,16 +17,14 @@ function getIdFromArticle(feed, guid) {
     return `${domain}-${guid}`;
 }
 
-async function crawlFeed(feedURL) {
+async function crawlArticle(feedURL, channel) {
     try {
         const feed = await parser.parseURL(feedURL);
 
         const db = await getDB();
         const collection = db.collection('article');
 
-        const articlesToInsert = [];
-
-        await Promise.all(feed.items.map(async (orginalArticle) => {
+        const saveArticlesPromise = feed.items.map(async (orginalArticle) => {
             const guid = getIdFromArticle(feed, orginalArticle.guid);
 
             const existingReport = await collection.findOne({ _id: guid });
@@ -38,22 +37,20 @@ async function crawlFeed(feedURL) {
                 description: orginalArticle.contentSnippet,
                 img: getImgFromArticle(orginalArticle),
                 isoDate: orginalArticle.isoDate,
+                channelFK: channel._id,
             };
 
-            articlesToInsert.push(article);
-        }));
+            await collection.updateOne(
+                { _id: article._id },
+                { $set: article },
+                { upsert: true },
+            );
+        });
 
-        if (articlesToInsert.length === 0) return;
-        await collection.insertMany(articlesToInsert);
+        await Promise.all(saveArticlesPromise);
     } catch (error) {
         console.error(error); // replace with logger
     }
 }
 
-const feeds = [
-    'https://partner-feeds.beta.20min.ch/rss/20minuten',
-    'https://www.srf.ch/news/bnf/rss/19032223',
-    'https://feeds.bbci.co.uk/news/rss.xml',
-    'https://www.nzz.ch/feuilleton.rss',
-];
-crawlFeed(feeds[3]);
+module.exports = crawlArticle;

@@ -31,7 +31,7 @@ function getImgFromArticle(article) {
 
     const url = handleDiffrentSources();
     if (!url) {
-        console.log('No img found'); // write to log
+        console.log('No img found', article.link); // write to log
         return null;
     }
 
