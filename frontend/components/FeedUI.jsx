@@ -53,7 +53,7 @@ function FeedUI(){
     const [data, setData] = useState([]);
 
     async function fetchData() {
-        const response = await fetch('http://10.80.4.184:3000/api/articles');
+        const response = await fetch('http://192.168.188.94:3000/api/articles');
         const jsonData = await response.json();
         setData(prevData => [...prevData, ...jsonData]);
     };

@@ -1,24 +1,23 @@
-import { Stack } from 'expo-router';
+import { Stack, Redirect } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import colors from '../constants/color'
+import Context from '../components/Context';
 
-export default function RootLayout() {
+function RootLayout() {
+    const [credentials, setCredentials] = useState(null);
 
     return (
-        <Stack>
-            <Stack.Screen name="index" options={{ headerShown: false }} />
-            <Stack.Screen name="settings" options={{
-                headerShown: true,
-                title: 'Einstellungen',
-                headerTintColor: 'white',
-                headerStyle: {
-                    backgroundColor: '#141414',
-                },
-                headerTitleStyle: {
-                    fontWeight: 'bold',
-                },
-                headerBackTitleVisible: false,
-            }}/>
-        </Stack>
+        <Context.Provider value={{credentials, setCredentials}}>
+            <Stack screenOptions={{headerShown: false}}>
+                <Stack.Screen name="(app)"/>
+                <Stack.Screen name="index" options={{
+                    headerShown: false,
+                }} />
+                <Stack.Screen name="auth" options={{
+                    headerShown: false,
+                }} />
+            </Stack>
+        </Context.Provider>
     );
 }
+
+export default RootLayout;

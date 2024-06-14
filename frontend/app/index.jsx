@@ -1,57 +1,61 @@
-import {SafeAreaView, StyleSheet, Text, TextInput, View, Dimensions, ScrollView} from 'react-native';
-import SegmentControl from '../components/SegmentControl'
-import FeedUI from "../components/FeedUI";
-import {Link} from "expo-router";
+import App from "./(app)"
+import Auth from "./auth"
+import React, {useContext, useEffect, useState} from "react";
+import * as SecureStore from "expo-secure-store";
+import Context from '../components/Context';
+import { router, Redirect  } from 'expo-router';
+import * as AppleAuthentication from "expo-apple-authentication";
+import {Text} from "react-native";
 
-const windowWidth = Dimensions.get('window').width;
+function Index(){
+    const { credentials, setCredentials } = useContext(Context);
+    const [loaded, setLoaded] = useState(false);
 
-function Index(props){
-    return(
-        <View style={styles.container}>
-            <SafeAreaView style={styles.header}>
-                <TextInput
-                    style={styles.input}
-                    //onChangeText={onChangeText}
-                    //value={text}
-                    placeholder="Search..."
-                    placeholderTextColor="#9E9EA5"
-                    returnKeyType="go"
-                />
-                <Link href="/settings">
-                    <View style={styles.profile}></View>
-                </Link>
-            </SafeAreaView>
-            <SegmentControl></SegmentControl>
-            <FeedUI></FeedUI>
-        </View>
-    )
-}
+    async function getSession(){
+        try{
+            const credentialsJSON = await SecureStore.getItemAsync('user');
+            if(!credentialsJSON) return;
+            const credentials = JSON.parse(credentialsJSON)
 
-const styles = StyleSheet.create({
-    container: {
-        backgroundColor: '#141414',
-        flex: 1,
-    },
-    header: {
-        flexDirection: "row",
-        gap: 15,
-        marginHorizontal: 15,
-    },
-    input: {
-        height: 50,
-        width: windowWidth - 95,
-        borderRadius: 25,
-        backgroundColor: "#2B2B2E",
-
-        paddingLeft: 25,
-        fontSize: 22,
-    },
-    profile: {
-        height: 50,
-        width: 50,
-        borderRadius: 25,
-        backgroundColor: "#7E7EFF",
+            const credentialsState = await AppleAuthentication.getCredentialStateAsync(credentials.user)
+            if(credentialsState !== 1){
+                return console.log(credentialsState);
+            }
+            setCredentials(credentials);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoaded(true)
+        }
     }
-});
+    useEffect(() => {
+        getSession()
+    }, [])
+/*
+    useEffect(() => {
+        if (credentials) {
+            router.replace('/(app)');
+        }
+    }, [credentials]);
+*/
+    if(!loaded){
+        return(
+            <Text>
+                Loading...
+            </Text>
+        )
+    }
+
+    if(credentials){
+        return(
+            <Redirect href="/(app)" />
+        )
+    }
+
+    return(
+        <Auth/>
+    )
+
+}
 
 export default Index;
