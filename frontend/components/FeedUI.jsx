@@ -29,10 +29,10 @@ function Article({item, index}){
                         <View style={styles.articleBottom}>
                             <Image style={styles.logo}
                                 source={{
-                                    uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Logo_SRF_1.svg/2560px-Logo_SRF_1.svg.png"
+                                    uri: item.channelImg,
                                 }}
                             ></Image>
-                            <Text style={styles.informationText}>srf.ch</Text>
+                            <Text style={styles.informationText}>{item.domain}</Text>
                             <View style={styles.point}></View>
                             <Text style={styles.informationText}>vor {calculateTimeAgo(item.isoDate)}</Text>
                         </View>
@@ -53,7 +53,7 @@ function FeedUI(){
     const [data, setData] = useState([]);
 
     async function fetchData() {
-        const response = await fetch('http://192.168.188.94:3000/api/articles');
+        const response = await fetch('http://10.80.4.184:3000/api/articles');
         const jsonData = await response.json();
         setData(prevData => [...prevData, ...jsonData]);
     };
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     logo: {
         aspectRatio: 2,
         resizeMode: "contain",
-        height: 10,
+        height: 15,
     },
     informationText: {
         color: "#8C8C8C",

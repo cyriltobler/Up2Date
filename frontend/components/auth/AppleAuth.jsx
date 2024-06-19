@@ -15,14 +15,25 @@ function AppleAuth() {
                 style={styles.button}
                 onPress={async () => {
                     try {
-                        const credential = await AppleAuthentication.signInAsync({
+                        const { identityToken } = await AppleAuthentication.signInAsync({
                             requestedScopes: [
                                 AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
                                 AppleAuthentication.AppleAuthenticationScope.EMAIL,
                             ],
                         });
-                        await SecureStore.setItemAsync('user', JSON.stringify(credential));
-                        await setCredentials(credential);
+
+                        const response = await fetch('http://10.80.4.184:3000/auth/apple/callback', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                token: identityToken,
+                            }),
+                        });
+
+                        console.log(response)
+                        if(!response.ok) return;
+
+                        setCredentials(true)
                     } catch (e) {
                         if (e.code === 'ERR_REQUEST_CANCELED') {
                             console.log('canceled')

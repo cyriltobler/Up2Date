@@ -9,9 +9,14 @@ function Settings(options){
     const { credentials, setCredentials } = useContext(Context);
 
     async function logOut(){
-        await SecureStore.deleteItemAsync('user');
-        await setCredentials(null);
-        router.replace('/');
+        await setCredentials(false);
+        const response = await fetch('http://10.80.4.184:3000/auth/logout', {
+            method: 'DELETE',
+            credentials: 'include',
+        });
+        if(response.ok){
+            router.replace('/');
+        }
     }
     return(
         <View style={styles.container}>

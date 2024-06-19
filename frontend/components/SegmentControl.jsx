@@ -6,10 +6,13 @@ const windowWidth = Dimensions.get('window').width;
 const subjects = ["Für dich", "abonniert", "Technik", "News", "..."];
 
 
-function SegmentControl(){
+function SegmentControl({openBottomSheet}){
     const [selectedSegment, setSelectedSegment] = useState(0);
 
     function handleSegmentPress(index){
+        if(index === subjects.length - 1){
+            return openBottomSheet()
+        }
         setSelectedSegment(index)
     }
 
