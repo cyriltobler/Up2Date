@@ -17,9 +17,9 @@ function getIdFromArticle(feed, guid) {
     return `${domain}-${guid}`;
 }
 
-async function crawlArticle(feedURL, channel) {
+async function crawlArticle(feedObject, channel) {
     try {
-        const feed = await parser.parseURL(feedURL);
+        const feed = await parser.parseURL(feedObject.url);
 
         const db = await getDB();
         const collection = db.collection('article');
@@ -37,6 +37,7 @@ async function crawlArticle(feedURL, channel) {
                 description: orginalArticle.contentSnippet,
                 img: getImgFromArticle(orginalArticle),
                 isoDate: orginalArticle.isoDate,
+                language: feedObject.language,
                 channelFK: channel._id,
             };
 

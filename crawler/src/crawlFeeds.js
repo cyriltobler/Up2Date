@@ -1,20 +1,12 @@
 const cheerio = require('cheerio');
 const axios = require('axios');
+const RSSParser = require('rss-parser');
 const getDB = require('./db');
 
-function getIcon($, websiteUrl) {
-    let channelImg = $('link[rel="icon"]').attr('href')
-    || $('link[rel="shortcut icon"]').attr('href')
-    || $('link[rel="apple-touch-icon"]').attr('href')
-    || '/favicon.ico';
+const parser = new RSSParser();
 
-    if (!channelImg.startsWith('http')) {
-        const url = new URL(websiteUrl);
-        channelImg = url.origin + (channelImg.startsWith('/') ? '' : '/') + channelImg;
-    }
-
-    return (channelImg);
-}
+const getIcon = require('./getIcon');
+const getLanguage = require('./getLanguage');
 
 async function getInsertObject(url) {
     try {
@@ -49,7 +41,9 @@ async function getInsertObject(url) {
 
                 const fileType = contentType.split(';')[0];
                 if (fileType === 'text/xml' || fileType === 'application/xml') {
-                    insertObject.push({ title, url: link });
+                    const feed = await parser.parseString(response.data);
+                    const language = getLanguage(feed.language);
+                    insertObject.push({ title, url: link, language });
                 }
             } catch (error) {
                 console.error('invalid link');
@@ -64,7 +58,7 @@ async function getInsertObject(url) {
 }
 
 async function startCrawlFeeds(url) {
-    const { feeds, channelImg } = await getInsertObject(url);
+    const { feeds, channelImg, language } = await getInsertObject(url);
 
     const db = await getDB();
     const collection = db.collection('channel');
@@ -75,6 +69,7 @@ async function startCrawlFeeds(url) {
     const channel = {
         domain,
         channelImg,
+        language,
         feeds,
     };
 
@@ -93,4 +88,4 @@ const urls = [
     'https://www.bbc.co.uk/news/10628494',
 ];
 
-startCrawlFeeds(urls[urls.length - 3]);
+startCrawlFeeds(urls[urls.length - 1]);

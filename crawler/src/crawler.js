@@ -21,8 +21,8 @@ async function fetchArticlesInBatches() {
 
         const crawlPromises = feeds.map(async (feed) => {
             console.log(feed.url);
-            await crawlArticle(feed.url, channel);
-            console.log("fetched: ", feed.url);
+            await crawlArticle(feed, channel);
+            console.log('fetched: ', feed.url);
         });
         await Promise.all(crawlPromises);
     }
