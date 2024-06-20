@@ -26,16 +26,18 @@ function Article({item, index}){
                 <View style={styles.container}>
                     <View style={styles.leftBox}>
                         <Text style={styles.title}>{item.title}</Text>
-                        <View style={styles.articleBottom}>
-                            <Image style={styles.logo}
-                                source={{
-                                    uri: item.channelImg,
-                                }}
-                            ></Image>
-                            <Text style={styles.informationText}>{item.domain}</Text>
-                            <View style={styles.point}></View>
-                            <Text style={styles.informationText}>vor {calculateTimeAgo(item.isoDate)}</Text>
-                        </View>
+                        <TouchableWithoutFeedback onPress={() => console.log('test')}>
+                            <View style={styles.articleBottom}>
+                                <Image style={styles.logo}
+                                    source={{
+                                        uri: item.channelImg,
+                                    }}
+                                ></Image>
+                                <Text style={styles.informationText}>{item.domain}</Text>
+                                <View style={styles.point}></View>
+                                <Text style={styles.informationText}>vor {calculateTimeAgo(item.isoDate)}</Text>
+                            </View>
+                        </TouchableWithoutFeedback>
                     </View>
                     <Image style={styles.img}
                         source={{
@@ -67,6 +69,7 @@ function FeedUI(){
             data={data}
             renderItem={({ item, index }) => <Article item={item} index={index} />}
             onEndReached={fetchData}
+            onEndReachedThreshold={0.8}
         ></FlatList>
     )
 }
@@ -94,6 +97,7 @@ const styles = StyleSheet.create({
     },
     title: {
         color: "white",
+        fontSize: 16,
     },
     articleBottom: {
         flexDirection: "row",
