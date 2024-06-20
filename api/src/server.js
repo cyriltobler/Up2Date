@@ -27,7 +27,7 @@ app.use('/auth', authRoutes);
 app.get('/api/articles', async (req, res) => {
     // console.log(req.user);
     try {
-        const articles = await getArticles();
+        const articles = await getArticles(req);
 
         res.json(articles);
     } catch (error) {

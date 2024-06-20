@@ -9,6 +9,7 @@ async function createUser(user, collection, done) {
     const newUser = {
         _id: sub,
         email,
+        seenArticleIds: [],
     };
 
     await collection.insertOne(newUser);
