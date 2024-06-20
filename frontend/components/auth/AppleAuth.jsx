@@ -3,9 +3,11 @@ import * as SecureStore from 'expo-secure-store';
 import { View, StyleSheet } from 'react-native';
 import Context from "../Context";
 import {useContext} from "react";
+import {router} from "expo-router";
 
 function AppleAuth() {
-    const { setCredentials } = useContext(Context);
+    const { setUserPreferences } = useContext(Context);
+
     return (
         <View style={styles.container}>
             <AppleAuthentication.AppleAuthenticationButton
@@ -30,10 +32,17 @@ function AppleAuth() {
                             }),
                         });
 
-                        console.log(response)
                         if(!response.ok) return;
 
-                        setCredentials(true)
+                        const data = await response.json();
+                        const language = data.user.language;
+
+                        if(!language) return router.replace('language')
+                        setUserPreferences({
+                            language
+                        })
+
+                        router.replace('(app)')
                     } catch (e) {
                         if (e.code === 'ERR_REQUEST_CANCELED') {
                             console.log('canceled')

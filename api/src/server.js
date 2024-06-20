@@ -21,8 +21,10 @@ app.use(passport.session());
 
 // import other routes
 const authRoutes = require('./auth/authRoutes');
+const profileRoutes = require('./profie/profileRoutes');
 
 app.use('/auth', authRoutes);
+app.use('/api/profile', profileRoutes);
 
 app.get('/api/articles', async (req, res) => {
     // console.log(req.user);

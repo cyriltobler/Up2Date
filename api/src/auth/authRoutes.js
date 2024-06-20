@@ -4,12 +4,23 @@ const passport = require('./passportConfig');
 const router = express.Router();
 
 router.post('/apple/callback', passport.authenticate('authtoken'), (req, res) => {
-    res.status(200).json();
+    const { email, language } = req.user;
+    const user = {
+        email,
+        language,
+    };
+
+    res.status(200).json({ user });
 });
 
 router.get('/', (req, res) => {
-    const isAuthenticated = Boolean(req.user);
-    res.json({ isAuthenticated });
+    if (!req.user) return res.status(200).json({ isAuthenticated: false });
+    const { email, language } = req.user;
+    const user = {
+        email,
+        language,
+    };
+    return res.status(200).json({ isAuthenticated: true, user });
 });
 
 router.delete('/logout', (req, res) => {

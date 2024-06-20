@@ -12,9 +12,9 @@ function BottomSheet({bottomSheetModalRef, subject}) {
             backgroundStyle={styles.bottomSheetModal}
             handleIndicatorStyle={styles.indicatorStyle}
         >
-            <BottomSheetView style={styles.container}>
+            <BottomSheetView style={styles.wrapper}>
                 {subject.map((item, index) => (
-                    <View key={index}>
+                    <View key={index} style={styles.container}>
                         <Text style={styles.text}>{item}</Text>
                     </View>
                 ))}
@@ -32,8 +32,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
     },
 
-    container: {
+    wrapper: {
         padding: 20
+    },
+    container: {
+        marginVertical: 5,
     },
     text: {
         fontSize: 17,

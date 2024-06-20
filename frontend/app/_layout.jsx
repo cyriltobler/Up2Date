@@ -3,10 +3,10 @@ import React, { useEffect, useState } from 'react';
 import Context from '../components/Context';
 
 function RootLayout() {
-    const [credentials, setCredentials] = useState(null);
+    const [userPreferences, setUserPreferences] = useState(null);
 
     return (
-        <Context.Provider value={{credentials, setCredentials}}>
+        <Context.Provider value={{userPreferences, setUserPreferences}}>
             <Stack screenOptions={{headerShown: false}}>
                 <Stack.Screen name="(app)"/>
                 <Stack.Screen name="index" options={{
