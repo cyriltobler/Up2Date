@@ -1,8 +1,8 @@
 const express = require('express');
 const session = require('express-session');
-const getArticles = require('./getArticles');
 const passport = require('./auth/passportConfig');
 const bodyParser = require('body-parser');
+const { checkIfAuthenticated } = require('./auth/middleware');
 
 const app = express();
 const port = 3000;
@@ -22,21 +22,11 @@ app.use(passport.session());
 // import other routes
 const authRoutes = require('./auth/authRoutes');
 const profileRoutes = require('./profie/profileRoutes');
+const articlesRoutes = require('./article/articles');
 
 app.use('/auth', authRoutes);
-app.use('/api/profile', profileRoutes);
-
-app.get('/api/articles', async (req, res) => {
-    // console.log(req.user);
-    try {
-        const articles = await getArticles(req);
-
-        res.json(articles);
-    } catch (error) {
-        console.log(error);
-        res.status(500).send('Beim berechnen ist ein Fehler aufgetreten.');
-    }
-});
+app.use('/api/profile', checkIfAuthenticated, profileRoutes);
+app.use('/api/articles', checkIfAuthenticated, articlesRoutes);
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);

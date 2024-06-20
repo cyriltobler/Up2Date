@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-const getDB = require('./db');
+const getDB = require('../db');
 
 async function getArticlesFromDB(db, seenArticleIds) {
     const collection = db.collection('article');
