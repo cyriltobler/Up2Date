@@ -4,9 +4,9 @@ const getArticles = require('./getArticles');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-    // console.log(req.user);
     try {
         const articles = await getArticles(req);
+        console.log(articles);
 
         res.json(articles);
     } catch (error) {
