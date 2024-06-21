@@ -1,7 +1,8 @@
-import {FlatList, View, Text, StyleSheet, TouchableWithoutFeedback, Image, Dimensions, Linking } from "react-native";
+import {FlatList, View, Text, StyleSheet, TouchableWithoutFeedback, RefreshControl, Image, Dimensions, Linking } from "react-native";
 import { useEffect, useState } from "react";
 import * as WebBrowser from 'expo-web-browser';
 import calculateTimeAgo from "./calculateTimeAgo";
+import {router} from "expo-router";
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -56,6 +57,7 @@ function FeedUI(){
 
     async function fetchData() {
         const response = await fetch('http://10.80.4.184:3000/api/articles');
+        if(response.status === 401) return router.replace('auth');
         const jsonData = await response.json();
         setData(prevData => [...prevData, ...jsonData]);
     };
@@ -70,6 +72,12 @@ function FeedUI(){
             renderItem={({ item, index }) => <Article item={item} index={index} />}
             onEndReached={fetchData}
             onEndReachedThreshold={0.8}
+            refreshControl={
+                <RefreshControl
+                    refreshing={true}
+                    onRefresh={() => console.log('refresh')}
+                />
+            }
         ></FlatList>
     )
 }
