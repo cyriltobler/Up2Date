@@ -5,6 +5,7 @@ const getDB = require('../db');
 
 async function createUser(user, collection, done) {
     const { sub, email } = user;
+    console.log(user);
 
     const newUser = {
         _id: sub,

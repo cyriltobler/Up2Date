@@ -19,12 +19,10 @@ async function fetchArticlesInBatches() {
         const { feeds } = channel;
         lastId = channel._id;
 
-        const crawlPromises = feeds.map(async (feed) => {
-            console.log(feed.url);
+        await feeds.reduce(async (previousPromise, feed) => {
+            await previousPromise;
             await crawlArticle(feed, channel);
-            console.log('fetched: ', feed.url);
-        });
-        await Promise.all(crawlPromises);
+        }, Promise.resolve());
     }
 }
 

@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 const Parser = require('rss-parser');
 const getImgFromArticle = require('./getImg');
+const getCategory = require('./getCategory');
 const getDB = require('./db');
 
 const parser = new Parser({
@@ -24,11 +25,19 @@ async function crawlArticle(feedObject, channel) {
         const db = await getDB();
         const collection = db.collection('article');
 
-        const saveArticlesPromise = feed.items.map(async (orginalArticle) => {
+        await feed.items.reduce(async (previousPromise, orginalArticle) => {
+            await previousPromise;
+
             const guid = getIdFromArticle(feed, orginalArticle.guid);
 
             const existingReport = await collection.findOne({ _id: guid });
             if (existingReport) return;
+
+            const subject = await getCategory({
+                title: orginalArticle.title,
+                link: orginalArticle.link,
+                description: orginalArticle.contentSnippet,
+            });
 
             const article = {
                 _id: guid,
@@ -38,6 +47,7 @@ async function crawlArticle(feedObject, channel) {
                 img: getImgFromArticle(orginalArticle),
                 isoDate: orginalArticle.isoDate,
                 language: feedObject.language,
+                subject,
                 channelFK: channel._id,
             };
 
@@ -46,9 +56,7 @@ async function crawlArticle(feedObject, channel) {
                 { $set: article },
                 { upsert: true },
             );
-        });
-
-        await Promise.all(saveArticlesPromise);
+        }, Promise.resolve());
     } catch (error) {
         console.error(error); // replace with logger
     }
