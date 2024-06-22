@@ -1,0 +1,32 @@
+[
+  {
+    "title": "Für dich",
+    "value": "/",
+    "fixed": true
+  },
+  {
+    "title": "Technik",
+    "value": "technology",
+    "fixed": false
+  },
+  {
+    "title": "Politik",
+    "value": "politics",
+    "fixed": false
+  },
+  {
+    "title": "Sport",
+    "value": "sport",
+    "fixed": false
+  },
+  {
+    "title": "Kultur",
+    "value": "culture",
+    "fixed": false
+  },
+  {
+    "title": "Wissen",
+    "value": "knowledge",
+    "fixed": false
+  }
+]

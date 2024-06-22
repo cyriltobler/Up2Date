@@ -3,16 +3,19 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import SegmentControl from '../../components/SegmentControl'
 import FeedUI from "../../components/FeedUI";
 import {Link} from "expo-router";
-import { useCallback, useRef } from "react"
+import {useCallback, useRef, useState} from "react"
 import { BottomSheetModal, BottomSheetModalProvider  } from '@gorhom/bottom-sheet';
 import BottomSheet from "../../components/BottomSheet"
+import subject from '../../constants/feeds.json'
 
-const subject = ["Politik", "Sport", "Wirtschaft", "Kultur", "Lokales", "Panorama", "Technologie", "Wissenschaft", "Gesundheit", "Auto", "Reise", "Immobilien", "Boulevard", "Musik", "Film", "Literatur", "Essen & Trinken", "Mode", "Familie", "Haustiere", "Umwelt", "Garten", "Wetter", "Bildung", "Finanzen", "Medien", "Religion", "Verkehr", "Verbrechen", "Unfälle"]
+const notDisplayedSubjects = subject.slice(4)
+const displayedSubjects = subject.slice(0, 4)
 
 const windowWidth = Dimensions.get('window').width;
 
-function Index(props){
+function Index(){
     const bottomSheetModalRef = useRef(null);
+    const [selectedFeed, setSelectedFeed] = useState("/");
 
     const openBottomSheet = () => {
         bottomSheetModalRef.current?.present();
@@ -39,9 +42,9 @@ function Index(props){
                             <View style={styles.profile}></View>
                         </Link>
                     </SafeAreaView>
-                    <SegmentControl openBottomSheet={openBottomSheet}></SegmentControl>
-                    <FeedUI></FeedUI>
-                    <BottomSheet bottomSheetModalRef={bottomSheetModalRef} subject={subject}></BottomSheet>
+                    <SegmentControl openBottomSheet={openBottomSheet} subject={displayedSubjects} setSelectedFeed={setSelectedFeed}></SegmentControl>
+                    <FeedUI selectedFeed={selectedFeed}></FeedUI>
+                    <BottomSheet bottomSheetModalRef={bottomSheetModalRef} subject={notDisplayedSubjects} setSelectedFeed={setSelectedFeed} closeBottomSheet={closeBottomSheet}></BottomSheet>
                 </View>
             </BottomSheetModalProvider>
         </GestureHandlerRootView>

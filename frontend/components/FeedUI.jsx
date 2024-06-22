@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import * as WebBrowser from 'expo-web-browser';
 import calculateTimeAgo from "./calculateTimeAgo";
 import {router} from "expo-router";
+import config from "../constants/config";
+import feeds from "../constants/feeds.json"
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -52,29 +54,57 @@ function Article({item, index}){
     )
 }
 
-function FeedUI(){
-    const [data, setData] = useState([]);
+function FeedUI({selectedFeed}){
+    const { title, value } = feeds.find(feed => feed.value === selectedFeed)
+
+    const [feedData, setFeedData] = useState({
+        [value]: {
+            title,
+            data: [],
+            scrollHeight: 0,
+        }
+    });
+    console.log(feedData)
+
+    function addData(newData){
+        console.log(newData)
+        setFeedData(prevState => ({
+            ...prevState,
+            [selectedFeed]: {
+                ...prevState[selectedFeed],
+                data: [...prevState[selectedFeed]?.data ?? [], ...newData],
+            },
+        }));
+    }
+
+    // const [data, setData] = useState([]);
 
     async function fetchData() {
-        const response = await fetch('http://10.80.4.184:3000/api/articles');
+        const response = await fetch(`${config.api.host}/api/articles/${selectedFeed}`);
         if(response.status === 401) return router.replace('auth');
         const jsonData = await response.json();
-        setData(prevData => [...prevData, ...jsonData]);
+
+        //feedData[selectedFeed].setData(prevData => [...prevData, ...jsonData]);
+        addData(jsonData)
     };
 
     useEffect(() => {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        fetchData();
+    }, [selectedFeed]);
+
     return(
         <FlatList
-            data={data}
+            data={feedData[selectedFeed]?.data ?? []}
             renderItem={({ item, index }) => <Article item={item} index={index} />}
             onEndReached={fetchData}
             onEndReachedThreshold={0.8}
             refreshControl={
                 <RefreshControl
-                    refreshing={true}
+                    refreshing={false}
                     onRefresh={() => console.log('refresh')}
                 />
             }

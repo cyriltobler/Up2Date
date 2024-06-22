@@ -4,6 +4,7 @@ import { View, StyleSheet } from 'react-native';
 import Context from "../Context";
 import {useContext} from "react";
 import {router} from "expo-router";
+import config from "../../constants/config"
 
 function AppleAuth() {
     const { setUserPreferences } = useContext(Context);
@@ -23,7 +24,7 @@ function AppleAuth() {
                         ],
                     });
 
-                    const response = await fetch('http://10.80.4.184:3000/auth/apple/callback', {
+                    const response = await fetch(`${config.api.host}/auth/apple/callback`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({

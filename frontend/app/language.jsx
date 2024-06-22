@@ -16,6 +16,7 @@ import {useContext, useState} from "react";
 import Icon from 'react-native-vector-icons/Feather';
 import {router} from "expo-router";
 import Context from '../components/Context';
+import config from '../constants/config'
 
 function LanguageItem({item, setLanguage, language}){
     function selectLanguage(){
@@ -50,7 +51,7 @@ function Language(){
     const [language, setLanguage] = useState(userPreferences?.language || []);
 
     async function submitLanguage(){
-        const response = await fetch('http://10.80.4.184:3000/api/profile/language', {
+        const response = await fetch(`${config.api.host}/api/profile/language`, {
             method: 'PUT',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },

@@ -2,12 +2,13 @@ import React, {useContext, useEffect, useState} from "react";
 import { router, Redirect  } from 'expo-router';
 import {Text, View} from "react-native";
 import Context from "../components/Context";
+import config from "../constants/config";
 
 function Index(){
     const { setUserPreferences } = useContext(Context);
 
     async function getSession(){
-        const response = await fetch('http://10.80.4.184:3000/auth', {
+        const response = await fetch(`${config.api.host}/auth`, {
             method: 'GET',
             credentials: 'include',
         });

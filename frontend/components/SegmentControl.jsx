@@ -3,27 +3,27 @@ import React, { useState } from 'react';
 
 const windowWidth = Dimensions.get('window').width;
 
-const subjects = ["Für dich", "abonniert", "Technik", "News", "..."];
-
-
-function SegmentControl({openBottomSheet}){
+function SegmentControl({openBottomSheet, subject, setSelectedFeed}){
     const [selectedSegment, setSelectedSegment] = useState(0);
 
+    subject = [...subject, {title: "..."}]
+
     function handleSegmentPress(index){
-        if(index === subjects.length - 1){
+        if(index === subject.length - 1){
             return openBottomSheet()
         }
         setSelectedSegment(index)
+        setSelectedFeed(subject[index].value)
     }
 
     return(
         <View style={styles.wrapper}>
-            {subjects.map((item, index) => (
+            {subject.map((item, index) => (
                 <TouchableOpacity key={index} style={[
                     styles.chip,
                     selectedSegment === index && styles.activeChip
                 ]} onPress={() => handleSegmentPress(index)}>
-                    <Text style={styles.text}>{item}</Text>
+                    <Text style={styles.text}>{item.title}</Text>
                 </TouchableOpacity>
             ))}
         </View>

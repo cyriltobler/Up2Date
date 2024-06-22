@@ -1,22 +1,29 @@
-import {StyleSheet, Text, View} from "react-native";
+import {StyleSheet, Text, TouchableWithoutFeedback, View} from "react-native";
 import {BottomSheetModal, BottomSheetView} from "@gorhom/bottom-sheet";
 
-function BottomSheet({bottomSheetModalRef, subject}) {
+function BottomSheet({bottomSheetModalRef, subject, setSelectedFeed, closeBottomSheet}) {
+    function handleLinkClicked(item){
+        setSelectedFeed(item.value)
+        closeBottomSheet()
+    }
+
     return(
         <View style={{ flex: 1, backgroundColor: '#1C1C1E' }}>
         <BottomSheetModal
             ref={bottomSheetModalRef}
             index={0}
-            snapPoints={['90%']}
-            //enablePanDownToClose={true}
+            snapPoints={['30%']}
             backgroundStyle={styles.bottomSheetModal}
             handleIndicatorStyle={styles.indicatorStyle}
         >
             <BottomSheetView style={styles.wrapper}>
+                <Text style={styles.title}>Andere Themen:</Text>
                 {subject.map((item, index) => (
-                    <View key={index} style={styles.container}>
-                        <Text style={styles.text}>{item}</Text>
-                    </View>
+                    <TouchableWithoutFeedback key={index} onPress={() => handleLinkClicked(item)}>
+                        <View  style={styles.container}>
+                            <Text style={styles.text}>{item.title}</Text>
+                        </View>
+                    </TouchableWithoutFeedback>
                 ))}
             </BottomSheetView>
         </BottomSheetModal>
@@ -33,10 +40,15 @@ const styles = StyleSheet.create({
     },
 
     wrapper: {
-        padding: 20
+        paddingHorizontal: 20
+    },
+    title: {
+        fontSize: 22,
+        color: "white",
+        textAlign: "center",
     },
     container: {
-        marginVertical: 5,
+        marginTop: 10,
     },
     text: {
         fontSize: 17,

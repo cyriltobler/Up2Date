@@ -4,10 +4,11 @@ import * as SecureStore from 'expo-secure-store';
 import {useContext} from "react";
 import { router } from 'expo-router';
 import * as AppleAuthentication from "expo-apple-authentication";
+import config from "../../constants/config";
 
 function Settings(){
     async function logOut(){
-        const response = await fetch('http://10.80.4.184:3000/auth/logout', {
+        const response = await fetch(`${config.api.host}/auth/logout`, {
             method: 'DELETE',
             credentials: 'include',
         });
