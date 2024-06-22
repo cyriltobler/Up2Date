@@ -22,11 +22,11 @@ app.use(passport.session());
 // import other routes
 const authRoutes = require('./auth/authRoutes');
 const profileRoutes = require('./profie/profileRoutes');
-const articlesRoutes = require('./article/articles');
+const articleRoutes = require('./article/articleRoutes');
 
 app.use('/auth', authRoutes);
 app.use('/api/profile', checkIfAuthenticated, profileRoutes);
-app.use('/api/articles', checkIfAuthenticated, articlesRoutes);
+app.use('/api/articles', checkIfAuthenticated, articleRoutes);
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
