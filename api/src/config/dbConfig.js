@@ -14,6 +14,7 @@ async function getDB() {
         client = new MongoClient(url);
         await client.connect();
     }
+
     return client.db('app');
 }
 

@@ -1,21 +1,7 @@
 const AuthTokenStrategy = require('passport-auth-token');
 const jwt = require('jsonwebtoken');
 const jwkToPem = require('jwk-to-pem');
-const getDB = require('../db');
-
-async function createUser(user, collection, done) {
-    const { sub, email } = user;
-    console.log(user);
-
-    const newUser = {
-        _id: sub,
-        email,
-        seenArticleIds: [],
-    };
-
-    await collection.insertOne(newUser);
-    return done(null, newUser);
-}
+const userService = require('../service/userService');
 
 const appleStartegy = new AuthTokenStrategy(async (token, done) => {
     try {
@@ -34,13 +20,14 @@ const appleStartegy = new AuthTokenStrategy(async (token, done) => {
             return done(null, false, { error: 'Wrong aud or iss' });
         }
 
-        const db = await getDB();
-        const collection = db.collection('user');
-        const dbResponse = await collection.findOne({ _id: decoded.sub });
+        const user = await userService.getUserByID(decoded.sub);
 
-        if (!dbResponse) return createUser(decoded, collection, done);
+        if (!user) {
+            const newUser = await userService.createUser(decoded);
+            return done(null, newUser);
+        }
 
-        return done(null, dbResponse);
+        return done(null, user);
     } catch (error) {
         return done(null, false, { error: error.message });
     }

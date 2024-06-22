@@ -1,19 +1,17 @@
 /* eslint-disable no-underscore-dangle */
 const passport = require('passport');
-const getDB = require('../db');
+const userService = require('../service/userService');
 
 passport.serializeUser((user, done) => done(null, user._id));
 
 passport.deserializeUser(async (id, done) => {
-    const db = await getDB();
-    const collection = db.collection('user');
+    const user = await userService.getUserByID(id);
 
-    const response = await collection.findOne({ _id: id });
-    return done(null, response);
+    return done(null, user);
 });
 
 // load all strategy
-const appleStrategy = require('./appleStrategy');
+const appleStrategy = require('../strategies/appleStrategie');
 
 passport.use(appleStrategy);
 
