@@ -64,10 +64,8 @@ function FeedUI({selectedFeed}){
             scrollHeight: 0,
         }
     });
-    console.log(feedData)
 
     function addData(newData){
-        console.log(newData)
         setFeedData(prevState => ({
             ...prevState,
             [selectedFeed]: {
@@ -80,7 +78,8 @@ function FeedUI({selectedFeed}){
     // const [data, setData] = useState([]);
 
     async function fetchData() {
-        const response = await fetch(`${config.api.host}/api/articles/${selectedFeed}`);
+        const response = await fetch(`${config.api.host}/api/articles${selectedFeed}`);
+        console.log(response)
         if(response.status === 401) return router.replace('auth');
         const jsonData = await response.json();
 

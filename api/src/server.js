@@ -1,3 +1,13 @@
+/**
+* @author Cyril Tobler
+* @date 2024-06-28
+* @version 1.0
+*
+* @description
+* This is the main entry point for the Express.js application. It sets up the server,
+* configures middleware, and defines routes for authentication, user profiles, and articles.
+*/
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const { checkIfAuthenticated } = require('./middleware/authMiddleware');

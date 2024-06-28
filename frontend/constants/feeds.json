@@ -6,27 +6,27 @@
   },
   {
     "title": "Technik",
-    "value": "technology",
+    "value": "/technology",
     "fixed": false
   },
   {
     "title": "Politik",
-    "value": "politics",
+    "value": "/politics",
     "fixed": false
   },
   {
     "title": "Sport",
-    "value": "sport",
+    "value": "/sport",
     "fixed": false
   },
   {
     "title": "Kultur",
-    "value": "culture",
+    "value": "/culture",
     "fixed": false
   },
   {
     "title": "Wissen",
-    "value": "knowledge",
+    "value": "/knowledge",
     "fixed": false
   }
 ]

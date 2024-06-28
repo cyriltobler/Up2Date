@@ -13,9 +13,10 @@ function Index(){
             credentials: 'include',
         });
 
-        const { isAuthenticated, user } = await response.json();
+        if(response.status === 401) return router.replace('auth')
 
-        if(!isAuthenticated) return router.replace('auth')
+        const { user } = await response.json();
+
         if(!user.language) return router.replace('language')
         setUserPreferences({
             language: user.language,
