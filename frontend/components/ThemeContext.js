@@ -1,5 +1,5 @@
 // ThemeContext.js
-import { createContext, useContext } from 'react';
+import {createContext, useContext} from 'react';
 import colors from '../constants/color'
 
 const ThemeContext = createContext(colors.dark);

@@ -1,9 +1,9 @@
 import AppleAuth from "../components/auth/AppleAuth";
-import {View, Text, StyleSheet, SafeAreaView, ImageBackground} from "react-native";
+import {ImageBackground, SafeAreaView, StyleSheet, Text, View} from "react-native";
 import startImg from "../assets/startscreen.png"
 
-function Auth(){
-    return(
+function Auth() {
+    return (
         <ImageBackground style={styles.screen} source={startImg}>
             <SafeAreaView style={styles.titleContainer}>
                 <Text style={styles.title}>Welcome Back👋</Text>

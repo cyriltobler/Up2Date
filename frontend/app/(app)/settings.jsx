@@ -1,22 +1,19 @@
-import {Button, Pressable, StyleSheet, Text, View} from "react-native"
-import Context from "../../components/Context";
-import * as SecureStore from 'expo-secure-store';
-import {useContext} from "react";
-import { router } from 'expo-router';
-import * as AppleAuthentication from "expo-apple-authentication";
+import {Pressable, StyleSheet, Text, View} from "react-native"
+import {router} from 'expo-router';
 import config from "../../constants/config";
 
-function Settings(){
-    async function logOut(){
+function Settings() {
+    async function logOut() {
         const response = await fetch(`${config.api.host}/auth/logout`, {
             method: 'DELETE',
             credentials: 'include',
         });
-        if(response.ok){
+        if (response.ok) {
             router.replace('auth');
         }
     }
-    return(
+
+    return (
         <View style={styles.container}>
             <Pressable style={styles.btn} onPress={() => router.push('language')}>
                 <Text style={styles.normalBtnText}>Sprache wählen</Text>

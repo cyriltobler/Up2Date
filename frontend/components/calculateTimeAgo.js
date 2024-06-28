@@ -17,15 +17,15 @@ function calculateTimeAgo(date) {
         return `${hours}h`;
     } else if (diff < month) {
         const days = Math.floor(diff / day);
-        if(day === 1) return `${days} Tag`;
+        if (day === 1) return `${days} Tag`;
         return `${days} Tagen`;
     } else if (diff < year) {
         const months = Math.floor(diff / month);
-        if(day === 1) return `${months} Monat`;
+        if (day === 1) return `${months} Monat`;
         return `${months} Monaten`;
     } else {
         const years = Math.floor(diff / year);
-        if(day === 1) return `${years} Jahr`;
+        if (day === 1) return `${years} Jahr`;
         return `${years} Jahren`;
     }
 }

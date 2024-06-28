@@ -1,15 +1,4 @@
-import {
-    Text,
-    StyleSheet,
-    View,
-    SafeAreaView,
-    FlatList,
-    Image,
-    TouchableWithoutFeedback,
-    Pressable,
-    Button,
-    Alert
-} from "react-native";
+import {Alert, FlatList, Pressable, SafeAreaView, StyleSheet, Text, TouchableWithoutFeedback, View} from "react-native";
 import languages from '../constants/iso_639.json';
 import CountryFlag from "react-native-country-flag";
 import {useContext, useState} from "react";
@@ -18,8 +7,8 @@ import {router} from "expo-router";
 import Context from '../components/Context';
 import config from '../constants/config'
 
-function LanguageItem({item, setLanguage, language}){
-    function selectLanguage(){
+function LanguageItem({item, setLanguage, language}) {
+    function selectLanguage() {
         setLanguage((prevLanguage) => {
             if (prevLanguage.includes(item["639-2"])) {
                 return prevLanguage.filter((language) => language !== item["639-2"]);
@@ -29,7 +18,7 @@ function LanguageItem({item, setLanguage, language}){
         });
     }
 
-    return(
+    return (
         <TouchableWithoutFeedback onPress={selectLanguage}>
             <View style={[
                 itemStyle.container,
@@ -39,26 +28,26 @@ function LanguageItem({item, setLanguage, language}){
                     <Text style={itemStyle.text}>{item.name}</Text>
                 </View>
                 {language.includes(item["639-2"]) && (
-                    <Icon name="check" size={25} color="#30D158" />
+                    <Icon name="check" size={25} color="#30D158"/>
                 )}
             </View>
         </TouchableWithoutFeedback>
     )
 }
 
-function Language(){
-    const { userPreferences, setUserPreferences } = useContext(Context);
+function Language() {
+    const {userPreferences, setUserPreferences} = useContext(Context);
     const [language, setLanguage] = useState(userPreferences?.language || []);
 
-    async function submitLanguage(){
+    async function submitLanguage() {
         const response = await fetch(`${config.api.host}/api/profile/language`, {
             method: 'PUT',
             credentials: 'include',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({language}),
         });
 
-        if(!response.ok){
+        if (!response.ok) {
             Alert.alert('Sprache konnte nicht gespeichert werden.')
         }
 
@@ -67,22 +56,23 @@ function Language(){
             language
         }));
 
-        if(router.canGoBack()){
+        if (router.canGoBack()) {
             return router.back();
         }
         router.replace('(app)');
     }
 
-    return(
+    return (
         <View style={styles.screen}>
             <SafeAreaView style={titleStyle.container}>
                 <Text style={titleStyle.text}>Sprachen</Text>
             </SafeAreaView>
-            <Text style={styles.description}>Wählen Sie die Sprachen, in denen die Artikel angezeigt werden sollen.</Text>
+            <Text style={styles.description}>Wählen Sie die Sprachen, in denen die Artikel angezeigt werden
+                sollen.</Text>
             <FlatList
                 style={styles.flatList}
                 data={languages}
-                renderItem={(({ item }) => <LanguageItem item={item} setLanguage={setLanguage} language={language} />)}
+                renderItem={(({item}) => <LanguageItem item={item} setLanguage={setLanguage} language={language}/>)}
             ></FlatList>
             <SafeAreaView>
                 <Pressable

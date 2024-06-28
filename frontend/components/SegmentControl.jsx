@@ -1,22 +1,22 @@
-import { StyleSheet, Text, Dimensions, View, ScrollView, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import {Dimensions, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useState} from 'react';
 
 const windowWidth = Dimensions.get('window').width;
 
-function SegmentControl({openBottomSheet, subject, setSelectedFeed}){
+function SegmentControl({openBottomSheet, subject, setSelectedFeed}) {
     const [selectedSegment, setSelectedSegment] = useState(0);
 
     subject = [...subject, {title: "..."}]
 
-    function handleSegmentPress(index){
-        if(index === subject.length - 1){
+    function handleSegmentPress(index) {
+        if (index === subject.length - 1) {
             return openBottomSheet()
         }
         setSelectedSegment(index)
         setSelectedFeed(subject[index].value)
     }
 
-    return(
+    return (
         <View style={styles.wrapper}>
             {subject.map((item, index) => (
                 <TouchableOpacity key={index} style={[

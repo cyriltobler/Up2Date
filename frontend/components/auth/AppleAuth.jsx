@@ -1,13 +1,12 @@
 import * as AppleAuthentication from 'expo-apple-authentication';
-import * as SecureStore from 'expo-secure-store';
-import { View, StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 import Context from "../Context";
 import {useContext} from "react";
 import {router} from "expo-router";
 import config from "../../constants/config"
 
 function AppleAuth() {
-    const { setUserPreferences } = useContext(Context);
+    const {setUserPreferences} = useContext(Context);
 
     return (
         <AppleAuthentication.AppleAuthenticationButton
@@ -17,7 +16,7 @@ function AppleAuth() {
             style={styles.button}
             onPress={async () => {
                 try {
-                    const { identityToken } = await AppleAuthentication.signInAsync({
+                    const {identityToken} = await AppleAuthentication.signInAsync({
                         requestedScopes: [
                             AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
                             AppleAuthentication.AppleAuthenticationScope.EMAIL,
@@ -26,18 +25,18 @@ function AppleAuth() {
 
                     const response = await fetch(`${config.api.host}/auth/apple/callback`, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: {'Content-Type': 'application/json'},
                         body: JSON.stringify({
                             token: identityToken,
                         }),
                     });
 
-                    if(!response.ok) return;
+                    if (!response.ok) return;
 
                     const data = await response.json();
                     const language = data.user.language;
 
-                    if(!language) return router.replace('language')
+                    if (!language) return router.replace('language')
                     setUserPreferences({
                         language
                     })

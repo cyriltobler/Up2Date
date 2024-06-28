@@ -1,5 +1,5 @@
-import { Stack, Redirect } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import {Stack} from 'expo-router';
+import React, {useState} from 'react';
 import Context from '../components/Context';
 
 function RootLayout() {
@@ -11,10 +11,10 @@ function RootLayout() {
                 <Stack.Screen name="(app)"/>
                 <Stack.Screen name="index" options={{
                     headerShown: false,
-                }} />
+                }}/>
                 <Stack.Screen name="auth" options={{
                     headerShown: false,
-                }} />
+                }}/>
             </Stack>
         </Context.Provider>
     );

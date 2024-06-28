@@ -1,5 +1,14 @@
-import {FlatList, View, Text, StyleSheet, TouchableWithoutFeedback, RefreshControl, Image, Dimensions, Linking } from "react-native";
-import { useEffect, useState } from "react";
+import {
+    Dimensions,
+    FlatList,
+    Image,
+    RefreshControl,
+    StyleSheet,
+    Text,
+    TouchableWithoutFeedback,
+    View
+} from "react-native";
+import {useEffect, useState} from "react";
 import * as WebBrowser from 'expo-web-browser';
 import calculateTimeAgo from "./calculateTimeAgo";
 import {router} from "expo-router";
@@ -8,19 +17,19 @@ import feeds from "../constants/feeds.json"
 
 const windowWidth = Dimensions.get('window').width;
 
-function Article({item, index}){
-    async function openArticle(url){
-        try{
+function Article({item, index}) {
+    async function openArticle(url) {
+        try {
             const result = await WebBrowser.openBrowserAsync(url, {
                 readerMode: true, //TODO Settings
             });
             //TODO Linking.openURL(url);
-        }catch(error){
+        } catch (error) {
             console.error(error);
         }
     }
 
-    return(
+    return (
         <View style={[
             styles.wrapper,
             index === 0 && styles.firstWrapper,
@@ -32,9 +41,9 @@ function Article({item, index}){
                         <TouchableWithoutFeedback onPress={() => console.log('test')}>
                             <View style={styles.articleBottom}>
                                 <Image style={styles.logo}
-                                    source={{
-                                        uri: item.channelImg,
-                                    }}
+                                       source={{
+                                           uri: item.channelImg,
+                                       }}
                                 ></Image>
                                 <Text style={styles.informationText}>{item.domain}</Text>
                                 <View style={styles.point}></View>
@@ -43,9 +52,9 @@ function Article({item, index}){
                         </TouchableWithoutFeedback>
                     </View>
                     <Image style={styles.img}
-                        source={{
-                            uri: item.img
-                        }}
+                           source={{
+                               uri: item.img
+                           }}
                     ></Image>
                 </View>
             </TouchableWithoutFeedback>
@@ -54,8 +63,8 @@ function Article({item, index}){
     )
 }
 
-function FeedUI({selectedFeed}){
-    const { title, value } = feeds.find(feed => feed.value === selectedFeed)
+function FeedUI({selectedFeed}) {
+    const {title, value} = feeds.find(feed => feed.value === selectedFeed)
 
     const [feedData, setFeedData] = useState({
         [value]: {
@@ -65,7 +74,7 @@ function FeedUI({selectedFeed}){
         }
     });
 
-    function addData(newData){
+    function addData(newData) {
         setFeedData(prevState => ({
             ...prevState,
             [selectedFeed]: {
@@ -80,7 +89,7 @@ function FeedUI({selectedFeed}){
     async function fetchData() {
         const response = await fetch(`${config.api.host}/api/articles${selectedFeed}`);
         console.log(response)
-        if(response.status === 401) return router.replace('auth');
+        if (response.status === 401) return router.replace('auth');
         const jsonData = await response.json();
 
         //feedData[selectedFeed].setData(prevData => [...prevData, ...jsonData]);
@@ -95,10 +104,10 @@ function FeedUI({selectedFeed}){
         fetchData();
     }, [selectedFeed]);
 
-    return(
+    return (
         <FlatList
             data={feedData[selectedFeed]?.data ?? []}
-            renderItem={({ item, index }) => <Article item={item} index={index} />}
+            renderItem={({item, index}) => <Article item={item} index={index}/>}
             onEndReached={fetchData}
             onEndReachedThreshold={0.8}
             refreshControl={
@@ -129,7 +138,7 @@ const styles = StyleSheet.create({
     leftBox: {
         width: windowWidth - 3 * 15.12 - 92,
         marginRight: 15.12,
-        justifyContent :"space-between",
+        justifyContent: "space-between",
         marginVertical: 4,
     },
     title: {

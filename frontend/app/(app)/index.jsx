@@ -1,10 +1,10 @@
-import {SafeAreaView, StyleSheet, Text, TextInput, View, Dimensions, ScrollView, Button} from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import {Dimensions, SafeAreaView, StyleSheet, TextInput, View} from 'react-native';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import SegmentControl from '../../components/SegmentControl'
 import FeedUI from "../../components/FeedUI";
 import {Link} from "expo-router";
-import {useCallback, useRef, useState} from "react"
-import { BottomSheetModal, BottomSheetModalProvider  } from '@gorhom/bottom-sheet';
+import {useRef, useState} from "react"
+import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import BottomSheet from "../../components/BottomSheet"
 import subject from '../../constants/feeds.json'
 
@@ -13,7 +13,7 @@ const displayedSubjects = subject.slice(0, 4)
 
 const windowWidth = Dimensions.get('window').width;
 
-function Index(){
+function Index() {
     const bottomSheetModalRef = useRef(null);
     const [selectedFeed, setSelectedFeed] = useState("/");
 
@@ -25,7 +25,7 @@ function Index(){
         bottomSheetModalRef.current?.dismiss();
     };
 
-    return(
+    return (
         <GestureHandlerRootView>
             <BottomSheetModalProvider>
                 <View style={styles.container}>
@@ -42,9 +42,11 @@ function Index(){
                             <View style={styles.profile}></View>
                         </Link>
                     </SafeAreaView>
-                    <SegmentControl openBottomSheet={openBottomSheet} subject={displayedSubjects} setSelectedFeed={setSelectedFeed}></SegmentControl>
+                    <SegmentControl openBottomSheet={openBottomSheet} subject={displayedSubjects}
+                                    setSelectedFeed={setSelectedFeed}></SegmentControl>
                     <FeedUI selectedFeed={selectedFeed}></FeedUI>
-                    <BottomSheet bottomSheetModalRef={bottomSheetModalRef} subject={notDisplayedSubjects} setSelectedFeed={setSelectedFeed} closeBottomSheet={closeBottomSheet}></BottomSheet>
+                    <BottomSheet bottomSheetModalRef={bottomSheetModalRef} subject={notDisplayedSubjects}
+                                 setSelectedFeed={setSelectedFeed} closeBottomSheet={closeBottomSheet}></BottomSheet>
                 </View>
             </BottomSheetModalProvider>
         </GestureHandlerRootView>
