@@ -1,4 +1,4 @@
-const iso639 = require('../iso_639.json');
+const iso639 = require('../data/iso_639.json');
 
 function getLanguage(languageInput) {
     const code = languageInput.split('-')[0];

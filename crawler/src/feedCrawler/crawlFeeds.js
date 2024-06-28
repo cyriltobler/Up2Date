@@ -1,7 +1,7 @@
 const cheerio = require('cheerio');
 const axios = require('axios');
 const RSSParser = require('rss-parser');
-const getDB = require('./db');
+const getDB = require('../dbConfig');
 
 const parser = new RSSParser();
 
