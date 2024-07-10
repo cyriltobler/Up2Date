@@ -3,7 +3,7 @@ const Parser = require('rss-parser');
 // TODO: Maybe in config
 const parser = new Parser({
     customFields: {
-        item: 'media:thumbnail',
+        item: ['media:thumbnail', 'media:content'],
     },
 });
 

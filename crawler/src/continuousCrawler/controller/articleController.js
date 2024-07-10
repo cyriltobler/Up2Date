@@ -20,12 +20,16 @@ async function handleStartFetchingArticles(lastId = null) {
         await feed.items.reduce(async (previousPromise2, article) => {
             await previousPromise2;
 
-            const articleId = articleService.getIdFromArticle(article.guid, feedObject);
-            console.log(articleId);
-            const existingReport = await articleService.getArticleById(articleId);
-            if (existingReport) return;
+            try {
+                const articleId = articleService.getIdFromArticle(article.guid, feedObject);
+                console.log(articleId);
+                const existingReport = await articleService.getArticleById(articleId);
+                if (existingReport) return;
 
-            await articleService.createArticleObject(article, feedObject, channel, articleId);
+                await articleService.createArticleObject(article, feedObject, channel, articleId);
+            } catch (e) {
+                console.error(e);
+            }
         }, Promise.resolve());
 
         console.log('Finished fetching ', feedObject.url);

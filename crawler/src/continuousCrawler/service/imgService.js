@@ -7,6 +7,10 @@ function getURL(article) {
         return article['media:thumbnail'].$.url;
     }
 
+    if (article['media:content']) {
+        return article['media:content'].$.url;
+    }
+
     const regex = /<img.*?src="(.*?)".*?>/;
     const match = regex.exec(article.content);
     if (match) {

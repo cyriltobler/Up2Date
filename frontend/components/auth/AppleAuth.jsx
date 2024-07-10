@@ -39,7 +39,7 @@ function AppleAuth() {
                     if (!language) return router.replace('language')
                     setUserPreferences({
                         language
-                    })
+                    });
 
                     router.replace('(app)')
                 } catch (e) {

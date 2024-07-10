@@ -37,10 +37,11 @@ async function getInsertObject(url) {
             try {
                 const response = await axios.get(link);
                 const contentType = response.headers['content-type'];
+                console.log(contentType, link);
                 if (!contentType) return;
 
                 const fileType = contentType.split(';')[0];
-                if (fileType === 'text/xml' || fileType === 'application/xml') {
+                if (fileType === 'text/xml' || fileType === 'application/xml' || fileType === 'application/rss+xml') {
                     const feed = await parser.parseString(response.data);
                     const language = getLanguage(feed.language);
                     insertObject.push({ title, url: link, language });
@@ -86,6 +87,8 @@ const urls = [
     'https://www.wired.com/about/rss-feeds/',
     'https://www.srf.ch/really-simple-syndication-rss-feeds-von-srf?srg_shorturl_source=rss',
     'https://www.bbc.co.uk/news/10628494',
+    'https://www.lemonde.fr/actualite-medias/article/2019/08/12/les-flux-rss-du-monde-fr_5498778_3236.html',
+    'https://www.france24.com/en/rss-feeds',
 ];
 
 startCrawlFeeds(urls[urls.length - 1]);

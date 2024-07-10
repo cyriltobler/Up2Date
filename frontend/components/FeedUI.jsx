@@ -1,19 +1,10 @@
-import {
-    Dimensions,
-    FlatList,
-    Image,
-    RefreshControl,
-    StyleSheet,
-    Text,
-    TouchableWithoutFeedback,
-    View
-} from "react-native";
+import { Dimensions, FlatList, Image, RefreshControl, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 import {useEffect, useState} from "react";
 import * as WebBrowser from 'expo-web-browser';
 import calculateTimeAgo from "./calculateTimeAgo";
 import {router} from "expo-router";
 import config from "../constants/config";
-import feeds from "../constants/feeds.json"
+import feeds from "../constants/feeds.json";
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -53,7 +44,7 @@ function Article({item, index}) {
                     </View>
                     <Image style={styles.img}
                            source={{
-                               uri: item.img
+                               uri: item.img,
                            }}
                     ></Image>
                 </View>
@@ -64,14 +55,14 @@ function Article({item, index}) {
 }
 
 function FeedUI({selectedFeed}) {
-    const {title, value} = feeds.find(feed => feed.value === selectedFeed)
+    const {title, value} = feeds.find(feed => feed.value === selectedFeed);
 
     const [feedData, setFeedData] = useState({
         [value]: {
             title,
             data: [],
             scrollHeight: 0,
-        }
+        },
     });
 
     function addData(newData) {
@@ -88,12 +79,11 @@ function FeedUI({selectedFeed}) {
 
     async function fetchData() {
         const response = await fetch(`${config.api.host}/api/articles${selectedFeed}`);
-        console.log(response)
         if (response.status === 401) return router.replace('auth');
         const jsonData = await response.json();
 
         //feedData[selectedFeed].setData(prevData => [...prevData, ...jsonData]);
-        addData(jsonData)
+        addData(jsonData);
     };
 
     useEffect(() => {
@@ -117,7 +107,7 @@ function FeedUI({selectedFeed}) {
                 />
             }
         ></FlatList>
-    )
+    );
 }
 
 const styles = StyleSheet.create({

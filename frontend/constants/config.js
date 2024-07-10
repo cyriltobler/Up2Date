@@ -1,5 +1,5 @@
 export default {
     api: {
-        host: "http://10.80.4.184:3000"
+        host: "http://10.75.4.9:3000"
     }
 };
